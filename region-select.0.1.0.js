@@ -23,6 +23,7 @@
     var RegionSelect = function (options) {
         var defaults = {
             language: 'en',
+            defaultValue: '',
             elementId: null,
             elementAttributes: {}
         };
@@ -64,6 +65,8 @@
                 this._countrySelectElement = document.getElementById(attributes[i].value);
             } else if (attributes[i].nodeName === "data-lang") {
                 this._options['language'] = attributes[i].value;
+            } else if (attributes[i].nodeName === "data-value") {
+                this._options['defaultValue'] = attributes[i].value;
             } else {
                 if (attributes[i].nodeName.indexOf("data-") === 0) {
                     attributeName = attributes[i].nodeName.substring(5);
@@ -78,6 +81,7 @@
     RegionSelect.prototype._init = function () {
         this._bindCountryEvents();
         this._showRegions(this._countrySelectElement.value);
+        this._showDefaultValue();
     };
 
     RegionSelect.prototype._bindCountryEvents = function () {
@@ -114,6 +118,10 @@
         this._element.parentNode.removeChild(this._element);
         this._element = newElement;
         this._bindElementEvents();
+    };
+
+    RegionSelect.prototype._showDefaultValue = function () {
+        this._element.value = this._options['defaultValue'];
     };
 
     RegionSelect.prototype._showRegions = function (country) {
